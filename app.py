@@ -192,8 +192,8 @@ def cleanup():
 
 
 if __name__ == "__main__":
-    app.run() #staging
+    # app.run() #staging
 
         # Cloud Run sets PORT
-    # port = int(os.environ.get("PORT", "8080"))
-    # app.run(host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", "8080"))
+    app.run(host="0.0.0.0", port=port)
