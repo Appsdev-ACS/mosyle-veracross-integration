@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime,timedelta
 
 today = datetime.today().date()
-tomorrow = today + timedelta(days=1)
+tomorrow = today + timedelta(days=3)
 
 
 def get_access_token(url,vc_client_id,vc_client_secret):
@@ -16,13 +16,17 @@ def get_access_token(url,vc_client_id,vc_client_secret):
     }
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
-    response = requests.post(url, data=data, headers=headers)
+    try:
 
-    if response.status_code == 200:
-        return response.json().get("access_token")
-    else:
-        print("Error fetching access token:", response.text)
-        return None
+        response = requests.post(url, data=data, headers=headers)
+
+        if response.status_code == 200:
+            return response.json().get("access_token")
+        else:
+            print("Error fetching access token:", response.text)
+            return None
+    except Exception as e:
+        return str(e)
     
 
     
