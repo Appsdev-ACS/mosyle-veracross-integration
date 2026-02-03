@@ -20,7 +20,7 @@ def get_token(AUTH_URL,EMAIL,PASSWORD,TOKEN):
     }
     headers = {"Content-Type": "application/json"}
 
-    response = requests.post(AUTH_URL, data=data, headers=headers)
+    response = requests.post(AUTH_URL, json=data, headers=headers)
 
 
     if response.status_code == 200:

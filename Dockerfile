@@ -18,4 +18,5 @@ EXPOSE 8080
 # CMD ["python", "app.py"]
 
 # Run with Gunicorn (production)
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8080", "--timeout", "300", "--graceful-timeout", "300"]

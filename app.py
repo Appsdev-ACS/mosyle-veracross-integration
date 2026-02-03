@@ -86,6 +86,8 @@ def cleanup():
         mosyle_jwt = get_token(AUTH_URL=MOSYLE_AUTH_URL,EMAIL=MOSYLE_EMAIL,PASSWORD=MOSYLE_PASSWORD,TOKEN=MOSYLE_TOKEN)
         staff_df,teacher_df = get_staff_faculty(access_token=vc_access_token,VC_STAFF_URL=VC_STAFF_URL,params_required=False)
         students = get_students(access_token=vc_access_token,students_url=VC_STUDENTS_URL,params_required=False)
+        if not mosyle_jwt:
+            return jsonify({"status":"error","message":"Mosyle JWT is missing"}), 500
         mosyle_users = list_users(MOSYLE_LIST_USERS_URL=MOSYLE_LIST_USERS_URL,accessToken=MOSYLE_TOKEN,jwt_token=mosyle_jwt)
         print("got mosyle users!")
 
@@ -124,13 +126,13 @@ def cleanup():
 
 
         to_add_df =  vc_users_df[~vc_users_df["id"].isin(mosyle_users["id"])]
-        print(to_add_df,"add")
+        # print(to_add_df,"add")
         # to_add_df.to_csv("add.csv", index=False)
 
         to_delete_df = mosyle_users[~mosyle_users["id"].isin(vc_users_df["id"])]
         to_delete_df = to_delete_df[to_delete_df["type"].str.upper() != "ADMIN"]
 
-        print(to_delete_df,"delete")
+        # print(to_delete_df,"delete")
         # to_delete_df.to_csv("delete.csv", index=False)
 
         # Merge VC and Mosyle on id
@@ -159,8 +161,12 @@ def cleanup():
             "grade_level_vc": "grade_level",
             "type_vc": "type"
         })
+        logger.info("to_add=%d", len(to_add_df))
+        logger.info("to_delete=%d", len(to_delete_df))
+        logger.info("to_update=%d", len(to_update))
+
         # to_update = to_update[vc_users_df.columns]
-        print(to_update,"update")
+        # print(to_update,"update")
         # to_update = to_update[to_update["type"].str.upper() != "ADMIN"]
 
         # to_update.to_csv("update.csv", index=False)
